@@ -35,9 +35,7 @@ export default function RootLayout({
           <header>
             <ThemeSwitch />
           </header>
-          <div className="slider-div fixed top-[2vh] right-[2vw] ">
-            <Slider />
-          </div>
+
           <div className="">{children}</div>
         </Providers>
       </body>

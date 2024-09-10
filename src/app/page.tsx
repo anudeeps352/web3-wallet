@@ -1,7 +1,8 @@
 import styles from './landing.module.css';
 import Image from 'next/image';
 
-import Homepagebutton from '@/components/Homepagebutton';
+import CreateWalletButton from '@/components/CreateWalletButton';
+import ViewWalletButton from '@/components/ViewWalletButton';
 export default function Home() {
   return (
     <div
@@ -12,7 +13,10 @@ export default function Home() {
         <h2 className="font-grotesk mx-auto mt-[30vh] text-[3rem] text-[#F3EEE7]">
           Crypt Wallet
         </h2>
-        <Homepagebutton />
+        <div className="flex flex-row justify-around w-[25vw]">
+          <CreateWalletButton />
+          <ViewWalletButton />
+        </div>
       </main>
     </div>
   );
