@@ -45,7 +45,11 @@ export default function CreateWallet() {
         <div className="secretphrases justify-end w-[90vw] mt-[5vh] self-center">
           <AccordionElement mnemonic={mnemonic} />
         </div>
-        {sol ? <CreateSolanaWallet mnemonic={mnemonic} /> : <CreateEthWallet />}
+        {sol ? (
+          <CreateSolanaWallet mnemonic={mnemonic} />
+        ) : (
+          <CreateEthWallet mnemonic={mnemonic} />
+        )}
       </div>
     </>
   );

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -31,6 +31,14 @@ export default function CreateSolanaWallet({ mnemonic }: proptype) {
   const [publicKeys, setPublicKeys] = useState<Keypair['publicKey'][]>([]);
   const [solWallets, setsolWallets] = useState<solwallet[]>([]);
   // change the storage from just array to array object
+
+  useEffect(() => {
+    const storedwallets = localStorage.getItem('wallets');
+    if (storedwallets) {
+      setsolWallets(JSON.parse(storedwallets));
+    }
+  }, []);
+
   const incrementIndex = () => {
     setCurrentIndex((prevIndex) => prevIndex + 1); // Correct usage
   };
@@ -60,6 +68,7 @@ export default function CreateSolanaWallet({ mnemonic }: proptype) {
     const newwallet = generatewallet(mnemonic);
     if (newwallet) {
       setsolWallets([...solWallets, newwallet]);
+      localStorage.setItem('wallets', JSON.stringify(solWallets));
     }
   };
 
@@ -67,26 +76,32 @@ export default function CreateSolanaWallet({ mnemonic }: proptype) {
     setsolWallets((prev) =>
       prev.filter((item, index) => index !== toremoveindex)
     );
+    localStorage.setItem('wallets', JSON.stringify(solWallets));
   };
   const clearall = () => {
     setsolWallets([]);
+    localStorage.setItem('wallets', JSON.stringify(solWallets));
   };
   return (
     <div className="wallet-div flex flex-col w-[80vw] mx-auto gap">
       <div className="buttons self-end flex gap-[1vw]">
-        <Button onClick={createWallet}>Add Wallet</Button>
-        <Button onClick={clearall}>Clear all Wallet</Button>
+        <Button onClick={createWallet} color="primary">
+          <h2 className="text-background">Add Wallet</h2>
+        </Button>
+        <Button onClick={clearall} color="danger">
+          Clear all Wallet
+        </Button>
       </div>
       <div className="flex flex-col mt-[2vh] ml-[0.5vw]">
         <h2 className="text-[2rem]">Solana Wallet</h2>
-        <div className="wallet-div flex flex-col gap-[3vh]">
+        <div className="wallet-div flex flex-col gap-[3vh] mt-[1vh] ">
           {solWallets.map((wallet: solwallet, index: number) => (
-            <Card className="bg-background">
+            <Card shadow="md" radius="md">
               <CardHeader>
-                <h2 className="text-[2rem]">wallet {index + 1}</h2>
+                <h2 className="text-[2rem]">Wallet {index + 1}</h2>
               </CardHeader>
               <Divider></Divider>
-              <CardBody>
+              <CardBody className="flex flex-col gap-[1vh] p-[1vw]">
                 <h2>Public key is :{wallet.publickey}</h2>
                 <h2>Private key is :{wallet.privatekey}</h2>
               </CardBody>
