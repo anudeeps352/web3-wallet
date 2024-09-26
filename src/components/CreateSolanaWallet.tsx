@@ -39,6 +39,12 @@ export default function CreateSolanaWallet({ mnemonic }: proptype) {
     }
   }, []);
 
+  useEffect(() => {
+    if (solWallets.length > 0) {
+      localStorage.setItem('wallets', JSON.stringify(solWallets));
+    }
+  }, [solWallets]);
+
   const incrementIndex = () => {
     setCurrentIndex((prevIndex) => prevIndex + 1); // Correct usage
   };
@@ -67,8 +73,8 @@ export default function CreateSolanaWallet({ mnemonic }: proptype) {
   const createWallet = () => {
     const newwallet = generatewallet(mnemonic);
     if (newwallet) {
-      setsolWallets([...solWallets, newwallet]);
-      localStorage.setItem('wallets', JSON.stringify(solWallets));
+      const updatedwallet = [...solWallets, newwallet];
+      setsolWallets(updatedwallet);
     }
   };
 
@@ -76,16 +82,15 @@ export default function CreateSolanaWallet({ mnemonic }: proptype) {
     setsolWallets((prev) =>
       prev.filter((item, index) => index !== toremoveindex)
     );
-    localStorage.setItem('wallets', JSON.stringify(solWallets));
   };
   const clearall = () => {
     setsolWallets([]);
-    localStorage.setItem('wallets', JSON.stringify(solWallets));
+    localStorage.setItem('wallets', JSON.stringify([]));
   };
   return (
     <div className="wallet-div flex flex-col w-[80vw] mx-auto gap">
       <div className="buttons self-end flex gap-[1vw]">
-        <Button onClick={createWallet} color="primary">
+        <Button onClick={() => createWallet()} color="primary">
           <h2 className="text-background">Add Wallet</h2>
         </Button>
         <Button onClick={clearall} color="danger">
