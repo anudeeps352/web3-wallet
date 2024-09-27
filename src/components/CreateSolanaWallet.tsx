@@ -14,12 +14,14 @@ import nacl from 'tweetnacl';
 import { derivePath } from 'ed25519-hd-key';
 import { Keypair } from '@solana/web3.js';
 import bs58 from 'bs58';
+import { AiOutlineEyeInvisible } from 'react-icons/ai';
 
 type solwallet = {
   publickey: string;
   privatekey: string;
   path: string;
   mnemonic: string;
+  visible: boolean;
 };
 type proptype = {
   mnemonic: string;
@@ -57,6 +59,7 @@ export default function CreateSolanaWallet({ mnemonic }: proptype) {
       const keypair = Keypair.fromSecretKey(secret);
       let privatekeyenc = bs58.encode(keypair.secretKey);
       let publickeyenc = keypair.publicKey.toBase58();
+      let visible = false;
       incrementIndex();
       // setPublicKeys([...publicKeys, keypair.publicKey]); do someting about it
       return {
@@ -64,12 +67,20 @@ export default function CreateSolanaWallet({ mnemonic }: proptype) {
         privatekey: privatekeyenc,
         path,
         mnemonic,
+        visible,
       };
     } catch (error) {
       return null;
     }
   };
 
+  const togglevisibility = (index: number) => {
+    setsolWallets((prev) =>
+      prev.map((wallet, i) =>
+        i === index ? { ...wallet, visible: !wallet.visible } : wallet
+      )
+    );
+  };
   const createWallet = () => {
     const newwallet = generatewallet(mnemonic);
     if (newwallet) {
@@ -106,9 +117,19 @@ export default function CreateSolanaWallet({ mnemonic }: proptype) {
                 <h2 className="text-[2rem]">Wallet {index + 1}</h2>
               </CardHeader>
               <Divider></Divider>
-              <CardBody className="flex flex-col gap-[1vh] p-[1vw]">
+              <CardBody className="flex flex-col gap-[1vh] p-[1vw] ">
                 <h2>Public key is :{wallet.publickey}</h2>
-                <h2>Private key is :{wallet.privatekey}</h2>
+                <div className="flex w-[100%]">
+                  <h2 className="w-[98%]">
+                    Private key is :
+                    {wallet.visible
+                      ? wallet.privatekey
+                      : '****************************************'}
+                  </h2>
+                  <button onClick={() => togglevisibility(index)}>
+                    <AiOutlineEyeInvisible />
+                  </button>
+                </div>
               </CardBody>
             </Card>
           ))}

@@ -13,12 +13,14 @@ import { mnemonicToSeedSync } from 'bip39';
 import { derivePath } from 'ed25519-hd-key';
 import { Wallet, HDNodeWallet } from 'ethers';
 import bs58 from 'bs58';
+import { AiOutlineEyeInvisible } from 'react-icons/ai';
 
 type ethwallet = {
   publickey: string;
   privatekey: string;
   path: string;
   mnemonic: string;
+  visible: boolean;
 };
 type proptype = {
   mnemonic: string;
@@ -57,6 +59,7 @@ export default function CreateEthWallet({ mnemonic }: proptype) {
         Buffer.from(wallet.address.slice(2), 'hex')
       );
       let publickeyenc = bs58.encode(publicKeyUint8Array);
+      let visible = false;
       incrementIndex();
       // setPublicKeys([...publicKeys, keypair.publicKey]); do someting about it
       return {
@@ -64,6 +67,7 @@ export default function CreateEthWallet({ mnemonic }: proptype) {
         privatekey: privatekeyenc,
         path,
         mnemonic,
+        visible,
       };
     } catch (error) {
       return null;
@@ -88,6 +92,14 @@ export default function CreateEthWallet({ mnemonic }: proptype) {
     setethWallets([]);
     localStorage.setItem('wallets', JSON.stringify(ethWallets));
   };
+
+  const togglevisibility = (index: number) => {
+    setethWallets((prev) =>
+      prev.map((wallet, i) =>
+        i === index ? { ...wallet, visible: !wallet.visible } : wallet
+      )
+    );
+  };
   return (
     <div className="wallet-div flex flex-col w-[80vw] mx-auto gap">
       <div className="buttons self-end flex gap-[1vw]">
@@ -109,7 +121,17 @@ export default function CreateEthWallet({ mnemonic }: proptype) {
               <Divider></Divider>
               <CardBody className="flex flex-col gap-[1vh] p-[1vw]">
                 <h2>Public key is :{wallet.publickey}</h2>
-                <h2>Private key is :{wallet.privatekey}</h2>
+                <div className="flex w-[100%]">
+                  <h2 className="w-[98%]">
+                    Private key is :
+                    {wallet.visible
+                      ? wallet.privatekey
+                      : '****************************************'}
+                  </h2>
+                  <button onClick={() => togglevisibility(index)}>
+                    <AiOutlineEyeInvisible />
+                  </button>
+                </div>
               </CardBody>
             </Card>
           ))}
