@@ -114,7 +114,7 @@ export default function CreateEthWallet({ mnemonic }: proptype) {
         <h2 className="text-[2rem]">Ethereum Wallet</h2>
         <div className="wallet-div flex flex-col gap-[3vh] mt-[1vh] ">
           {ethWallets.map((wallet: ethwallet, index: number) => (
-            <Card shadow="md" radius="md">
+            <Card key={index} shadow="md" radius="md">
               <CardHeader>
                 <h2 className="text-[2rem]">Wallet {index + 1}</h2>
               </CardHeader>
