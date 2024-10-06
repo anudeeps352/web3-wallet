@@ -9,7 +9,7 @@ export default function CreateWalletButton() {
   return (
     <div className="w-[10vw] relative">
       <Button
-        className="bg-[#ECDBBB]"
+        className="bg-[#ECDBBB] text-black"
         onClick={() => router.push('/create-wallet')}
         fullWidth
       >

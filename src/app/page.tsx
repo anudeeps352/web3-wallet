@@ -13,9 +13,8 @@ export default function Home() {
         <h2 className="font-grotesk mx-auto mt-[30vh] text-[3rem] text-[#F3EEE7]">
           Crypt Wallet
         </h2>
-        <div className="flex flex-row justify-around w-[25vw]">
+        <div className="flex flex-row justify-around w-[25vw] mt-[1vh]">
           <CreateWalletButton />
-          <ViewWalletButton />
         </div>
       </main>
     </div>
